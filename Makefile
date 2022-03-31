@@ -7,7 +7,7 @@ BIN = bin
 SRC = src
 
 CC = g++
-CFLAGS = -O2 -Wall -Wextra
+CFLAGS = -O2 -Wall
 LIBS = -lcurl
 
 all: $(SRC)/main.cpp

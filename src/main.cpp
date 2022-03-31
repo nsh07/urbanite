@@ -23,8 +23,8 @@
 
 #include <curl/curl.h>
 #include <string>
-#include "include/Figlet.hpp"
-#include "include/urban++.hpp"
+#include "../include/Figlet.hpp"
+#include "../include/urban++.hpp"
 
 using srilakshmikanthanp::FigletFont;
 using srilakshmikanthanp::Smushed;
@@ -42,16 +42,16 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    srilakshmikanthanp::Figlet figlet(FigletFont::make("figlet-font/Standard.flf"), Smushed::make());
+    srilakshmikanthanp::Figlet figlet(FigletFont::make("src/Standard.flf"), Smushed::make());
     nm::Urban urban;
 
     urban.setSearchTerm(argv[1]);
     CURLcode err = urban.fetch();
-    
-    double likeDislikeRatio = 0;
-    double likeDislikePercentage = 0;
 
     if (err == CURLE_OK) {
+        double likeDislikeRatio = 0;
+        double likeDislikePercentage = 0;
+        
         if (urban.getTopThumbsDown() != 0) 
             likeDislikeRatio = roundToPlaces((double) urban.getTopThumbsUp()/urban.getTopThumbsDown(), 2);
         
