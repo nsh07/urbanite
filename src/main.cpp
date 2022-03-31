@@ -19,7 +19,7 @@
 */
 
 #include <iostream>
-#include <cstdlib>
+#include <cmath>
 
 #include <curl/curl.h>
 #include <string>
@@ -29,16 +29,16 @@
 using srilakshmikanthanp::FigletFont;
 using srilakshmikanthanp::Smushed;
 
-std::string repeat(int n, std::string str) {
-    std::ostringstream os;
-    for(int i = 0; i < n; i++)
-        os << str;
-    return os.str();
+double roundToPlaces(double decimal, int places)
+{
+    double multiplier = std::pow(10, places);
+    return std::ceil(decimal * multiplier) / multiplier;
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     if (argc == 1) {
-        std::cerr << "Error: No word/phrase provided";
+        std::cerr << "\e[33mError: No word/phrase provided\e[0m" << std::endl;
         return 1;
     }
 
@@ -49,18 +49,21 @@ int main(int argc, char *argv[]) {
     CURLcode err = urban.fetch();
     
     double likeDislikeRatio = 0;
+    double likeDislikePercentage = 0;
 
     if (err == CURLE_OK) {
-        if (urban.getTopThumbsDown() != 0) likeDislikeRatio = (double) urban.getTopThumbsUp()/urban.getTopThumbsDown();
+        if (urban.getTopThumbsDown() != 0) 
+            likeDislikeRatio = roundToPlaces((double) urban.getTopThumbsUp()/urban.getTopThumbsDown(), 2);
+        
+        double totalVote = urban.getTopThumbsUp() + urban.getTopThumbsDown();
+        likeDislikePercentage = roundToPlaces(urban.getTopThumbsUp()/totalVote, 4) * 100;
 
         std::cout << figlet(urban.getWord(0));
 
         std::cout << urban.getTopDefinition() << "\n\n";
         std::cout << urban.getTopExample() << "\n\n";
         std::cout << "by " << urban.getTopAuthor() << "\n";
-        std::cout << "👍 " << urban.getTopThumbsUp() << "    👎 " << urban.getTopThumbsDown() << "    👍/👎 " << likeDislikeRatio << "\n";
-        
-        std::cout << repeat(80, "─") << std::endl;
+        std::cout << "👍 " << urban.getTopThumbsUp() << "    👎 " << urban.getTopThumbsDown() << "    👍/👎 " << likeDislikeRatio << ", " << likeDislikePercentage << "%" << std::endl;
         
         return 0;
     }
@@ -68,6 +71,6 @@ int main(int argc, char *argv[]) {
         std::cerr << "No search results found for word/phrase \"" << argv[1] << "\"\n";
         return 1;
     }
-    else std::cerr << "An error occured while fetching results: " <<curl_easy_strerror(err) << "\n";
+    else std::cerr << "An error occured while fetching results: " << curl_easy_strerror(err) << "\n";
     return 1;
 }
