@@ -1,7 +1,7 @@
 /*
 
     Urbanite, a CLI for Urban Dictionary (https://www.urbandictionary.com)
-    Copyright (C) 2021  Nishant Mishra <https://github.com/NMrocks>
+    Copyright (C) 2021, 2022  Nishant Mishra <https://github.com/NMrocks>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,59 +18,30 @@
 
 */
 
-#include <iostream>
-#include <cmath>
-
-#include <curl/curl.h>
-#include <string>
-#include "../include/Figlet.hpp"
 #include "../include/urban++.hpp"
-
-using srilakshmikanthanp::FigletFont;
-using srilakshmikanthanp::Smushed;
-
-double roundToPlaces(double decimal, int places)
-{
-    double multiplier = std::pow(10, places);
-    return std::ceil(decimal * multiplier) / multiplier;
-}
+#include "../include/print.hpp"
 
 int main(int argc, char *argv[])
 {
-    if (argc == 1) {
+    if (argc < 2) { // If no search term is provided
         std::cerr << "\e[33mError: No word/phrase provided\e[0m" << std::endl;
         return 1;
     }
 
-    srilakshmikanthanp::Figlet figlet(FigletFont::make("src/Standard.flf"), Smushed::make());
     nm::Urban urban;
 
-    urban.setSearchTerm(argv[1]);
+    urban.setSearchTerm(argv[1]); // Set the search term to argv[1], all other args are discarded
     CURLcode err = urban.fetch();
 
     if (err == CURLE_OK) {
-        double likeDislikeRatio = 0;
-        double likeDislikePercentage = 0;
-        
-        if (urban.getTopThumbsDown() != 0) 
-            likeDislikeRatio = roundToPlaces((double) urban.getTopThumbsUp()/urban.getTopThumbsDown(), 2);
-        
-        double totalVote = urban.getTopThumbsUp() + urban.getTopThumbsDown();
-        likeDislikePercentage = roundToPlaces(urban.getTopThumbsUp()/totalVote, 4) * 100;
-
-        std::cout << figlet(urban.getWord(0));
-
-        std::cout << urban.getTopDefinition() << "\n\n";
-        std::cout << urban.getTopExample() << "\n\n";
-        std::cout << "by " << urban.getTopAuthor() << "\n";
-        std::cout << "👍 " << urban.getTopThumbsUp() << "    👎 " << urban.getTopThumbsDown() << "    👍/👎 " << likeDislikeRatio << ", " << likeDislikePercentage << "%" << std::endl;
-        
+        printTitle(urban, "src/Standard.flf"); // Print the word (title)
+        printDefinition(urban, "👍", "👎");   // and the definition
         return 0;
     }
     if (err == CURLE_GOT_NOTHING) {
-        std::cerr << "No search results found for word/phrase \"" << argv[1] << "\"\n";
+        std::cerr << "\e[33mNo search results found for word/phrase \"" << argv[1] << "\"\e[0m\n";
         return 1;
     }
-    else std::cerr << "An error occured while fetching results: " << curl_easy_strerror(err) << "\n";
+    else std::cerr << "\e[31mAn error occured while fetching results: " << curl_easy_strerror(err) << "\e[0m\n";
     return 1;
 }
