@@ -1,7 +1,7 @@
 /*
 
     Urbanite, a CLI for Urban Dictionary (https://www.urbandictionary.com)
-    Copyright (C) 2021, 2022  Nishant Mishra <https://github.com/NMrocks>
+    Copyright (C) 2021, 2022 Nishant Mishra <https://github.com/NMrocks>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,23 +18,83 @@
 
 */
 
-#include "../include/urban++.hpp"
+#ifndef PREFIX_DIR /* PREFIX_DIR should be defined at compile time. If not: */
+#define PREFIX_DIR "/usr"
+#endif
+
+#include <filesystem>
+#include <getopt.h>
+
+#include "../include/help.hpp"
 #include "../include/print.hpp"
+#include "../include/urban++.hpp"
 
 int main(int argc, char *argv[])
 {
-    if (argc < 2) { // If no search term is provided
+    int ret, index;
+    std::string searchTerm = "", fontFile = "standard.flf";
+    const std::string prefix = PREFIX_DIR;
+    const std::string figletFontDir = "/usr/share/figlet/";
+    const std::string urbaniteFontDir = prefix + "/share/urbanite/";
+
+    struct option longOptions[]
+    {
+        {"font-file", required_argument, 0, 'f'},
+        {"help",      no_argument,       0, 'h'},
+        {"version",   no_argument,       0, 'v'},
+        {0, 0, 0, 0}
+    };
+
+    while ((ret = getopt_long(argc, argv, "f:hv?", longOptions, &index)) != -1)
+    {
+        switch (ret)
+        {
+            case 'f':
+            fontFile = optarg;
+            break;
+
+            case '?':
+            case 'h':
+            std::cout << helpStr();
+            return 0;
+
+            case 'v':
+            std::cout << versionStr();
+            return 0;
+        }
+    }
+
+    for (index = optind; index < argc; ++index)
+    {
+        if (searchTerm.size() == 0)
+            searchTerm += argv[index];
+        else {
+            searchTerm += " ";
+            searchTerm += argv[index];
+        }
+    }
+
+    if (searchTerm.size() == 0) {
         std::cerr << "\e[33mError: No word/phrase provided\e[0m" << std::endl;
         return 1;
     }
 
+    if (!(std::filesystem::exists(urbaniteFontDir + fontFile))) {
+        if (std::filesystem::exists(figletFontDir + fontFile)) fontFile = figletFontDir + fontFile;
+        else if (!(std::filesystem::exists(fontFile))) {
+            std::cerr << "\e[33mInvalid font file \"" << fontFile << "\"\e[0m\n";
+            return 1;
+        }
+    }
+    else fontFile = urbaniteFontDir + fontFile;
+
     nm::Urban urban;
 
-    urban.setSearchTerm(argv[1]); // Set the search term to argv[1], all other args are discarded
+    urban.setSearchTerm(searchTerm);
     CURLcode err = urban.fetch();
 
     if (err == CURLE_OK) {
-        printTitle(urban, "src/Standard.flf"); // Print the word (title)
+        printTitle(urban, fontFile); // Print the word (title)
         printDefinition(urban, "👍", "👎");   // and the definition
         return 0;
     }
