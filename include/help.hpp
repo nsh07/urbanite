@@ -3,7 +3,7 @@
 
 #include <string>
 
-std::string helpStr();
+std::string helpStr(std::string progName);
 std::string versionStr();
 
 #endif

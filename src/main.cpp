@@ -31,13 +31,14 @@
 
 int main(int argc, char *argv[])
 {
+    static nm::Initializer init; // Initialize Urban++ transfer environment
+
     int ret, index;
     std::string searchTerm = "", fontFile = "standard.flf";
-    const std::string prefix = PREFIX_DIR;
     const std::string figletFontDir = "/usr/share/figlet/";
-    const std::string urbaniteFontDir = prefix + "/share/urbanite/";
+    const std::string urbaniteFontDir = PREFIX_DIR "/share/urbanite/";
 
-    struct option longOptions[]
+    struct option longOptions[] // Long options
     {
         {"font-file", required_argument, 0, 'f'},
         {"help",      no_argument,       0, 'h'},
@@ -49,24 +50,24 @@ int main(int argc, char *argv[])
     {
         switch (ret)
         {
-            case 'f':
+            case 'f': // Set font file
             fontFile = optarg;
             break;
 
-            case '?':
+            case '?': // Help
             case 'h':
-            std::cout << helpStr();
+            std::cout << helpStr(argv[0]);
             return 0;
 
-            case 'v':
+            case 'v': // Version
             std::cout << versionStr();
             return 0;
         }
     }
 
-    for (index = optind; index < argc; ++index)
+    for (index = optind; index < argc; ++index) // Set rest of the arguments as search term
     {
-        if (searchTerm.size() == 0)
+        if (searchTerm.size() == 0) // Don't append a space if string is empty
             searchTerm += argv[index];
         else {
             searchTerm += " ";
@@ -74,15 +75,26 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (searchTerm.size() == 0) {
-        std::cerr << "\e[33mError: No word/phrase provided\e[0m" << std::endl;
+    if (searchTerm.size() == 0) { // If search term is still empty
+        std::cerr << argv[0] << ": No word/phrase provided" << std::endl;
         return 1;
     }
 
+    /*
+    Font file setting algorithm. Prioritizes directories in the following order:
+    1. PREFIX_DIR/share/urbanite/
+    2. /usr/share/figlet/
+    3. current directory
+
+    This, however, breaks support on OSs other than Linux distributions because of the directory
+    structure assumptions. Will fix cross-platform compatibility later.
+    Also, this requires the C++ standard to be set to C++17 in the compiler options (for the
+    filesystem library)
+    */
     if (!(std::filesystem::exists(urbaniteFontDir + fontFile))) {
         if (std::filesystem::exists(figletFontDir + fontFile)) fontFile = figletFontDir + fontFile;
         else if (!(std::filesystem::exists(fontFile))) {
-            std::cerr << "\e[33mInvalid font file \"" << fontFile << "\"\e[0m\n";
+            std::cerr << argv[0] << ": Invalid font file \"" << fontFile << "\"\n";
             return 1;
         }
     }
@@ -93,15 +105,15 @@ int main(int argc, char *argv[])
     urban.setSearchTerm(searchTerm);
     CURLcode err = urban.fetch();
 
-    if (err == CURLE_OK) {
+    if (err == CURLE_OK) { // If transfer successful
         printTitle(urban, fontFile); // Print the word (title)
         printDefinition(urban, "👍", "👎");   // and the definition
         return 0;
     }
     if (err == CURLE_GOT_NOTHING) {
-        std::cerr << "\e[33mNo search results found for word/phrase \"" << argv[1] << "\"\e[0m\n";
+        std::cerr << argv[0] << "No search results found for word/phrase \"" << searchTerm << "\"\e[0m\n";
         return 1;
     }
-    else std::cerr << "\e[31mAn error occured while fetching results: " << curl_easy_strerror(err) << "\e[0m\n";
-    return 1;
+    else std::cerr << argv[0] << ": (" << err << ") " << curl_easy_strerror(err) << "\n";
+    return err;
 }

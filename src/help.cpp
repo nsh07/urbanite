@@ -6,10 +6,10 @@
 #define PREFIX_DIR "/usr"
 #endif
 
-std::string helpStr()
+std::string helpStr(std::string progName)
 {
     return
-    "Usage: urbanite ... [OPTIONS] ...\n"
+    "Usage: " + progName + " ... [OPTIONS] ...\n"
     "Search words on Urban Dictionary at the comfort of your terminal.\n\n"
     "Options:\n"
     "Mandatory arguments to long options are mandatory for short options too.\n"
