@@ -1,12 +1,12 @@
 // Copyright (c) 2021 Sri Lakshmi Kanthan P
-// 
+//
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
 /**
  * @mainpage Figlet
  * @brief Generate large out of ordinary text
- * With BasicFiglet in C++ but using this library
+ * With BasicFiglet in C++ using this library
  * @author Sri Lakshmi Kanthan P
  */
 
@@ -23,7 +23,7 @@
 #include <sstream>
 
 /**
- * @brief srilakshmikanthanp namespace 
+ * @brief srilakshmikanthanp namespace
  */
 namespace srilakshmikanthanp
 {
@@ -42,21 +42,21 @@ namespace srilakshmikanthanp
 
         /**
          * @brief Get the Hard Blank character
-         * 
+         *
          * @return char_type hardblank
          */
         virtual char_type getHardBlank() const = 0;
 
         /**
          * @brief Get the Height
-         * 
+         *
          * @return size_type height
          */
         virtual size_type getHeight() const = 0;
 
         /**
          * @brief Get the Shrink
-         * 
+         *
          * @return size_type shrink value
          * 0 - untouched
          * 1 - kerning
@@ -66,7 +66,7 @@ namespace srilakshmikanthanp
 
         /**
          * @brief Get the BasicFiglet character
-         * 
+         *
          * @return Figc_type BasicFiglet character
          */
         virtual Figc_type getFigc(char_type) const = 0;
@@ -87,7 +87,7 @@ namespace srilakshmikanthanp
 
         /**
          * @brief Get the Shrinl Level
-         * 
+         *
          * @return size_type
          * 0 - untouched
          * 1 - kerning
@@ -97,19 +97,18 @@ namespace srilakshmikanthanp
 
         /**
          * @brief Get the Fig string
-         * 
+         *
          * @param figchs figlet characters
          * @param hardblank hardblank
          * @param height height
          * @param shirnk shrinkklevel
          * @return Figs_type Fig string
          */
-        virtual Figs_type getFigs (
+        virtual Figs_type getFigs(
             std::vector<Figc_type> figchs,
             char_type hardblank,
             size_type height,
-            size_type shirnk
-        ) const = 0;
+            size_type shirnk) const = 0;
     };
 
     /**
@@ -135,7 +134,6 @@ namespace srilakshmikanthanp
     private:
         base_font font;
         base_style style;
-        string_type str;
 
     public:
         BasicFiglet() = delete;
@@ -144,12 +142,11 @@ namespace srilakshmikanthanp
 
         /**
          * @brief Construct a new BasicFiglet object
-         * 
+         *
          * @param font font type
          * @param style style type
          */
-        BasicFiglet(base_font font, base_style style)
-            : font(font), style(style)
+        BasicFiglet(base_font font, base_style style): font(font), style(style)
         {
             if (font->getShrink() < style->getShrinkLevel())
             {
@@ -159,8 +156,8 @@ namespace srilakshmikanthanp
 
         /**
          * @brief Set the BasicFont object
-         * 
-         * @param font 
+         *
+         * @param font
          */
         void setFont(base_font font)
         {
@@ -169,8 +166,8 @@ namespace srilakshmikanthanp
 
         /**
          * @brief Set the BasicStyle object
-         * 
-         * @return style 
+         *
+         * @return style
          */
         void setStyle(base_style style)
         {
@@ -179,8 +176,8 @@ namespace srilakshmikanthanp
 
         /**
          * @brief Get the BasicFont object
-         * 
-         * @return font 
+         *
+         * @return font
          */
         base_font &getFont()
         {
@@ -189,8 +186,8 @@ namespace srilakshmikanthanp
 
         /**
          * @brief Get the BasicStyle object
-         * 
-         * @param style 
+         *
+         * @param style
          */
         base_style &getStyle()
         {
@@ -199,62 +196,39 @@ namespace srilakshmikanthanp
 
         /**
          * @brief set stringto figlet
-         * 
-         * @param str string 
-         * @return BasicFiglet& *this
+         *
+         * @param str string
+         * @return Figlet string
          */
-        BasicFiglet &operator()(const string_type &str)
-        {
-            this->str = str;
-            return *this;
-        }
-
-        /**
-         * @brief operator << printer
-         * 
-         * @param os ostream
-         * @param figlet figlet
-         * @return ostream_type& os
-         */
-        friend ostream_type &operator<<(ostream_type &os, BasicFiglet &figlet)
+        string_type operator()(const string_type &str)
         {
             std::vector<Figc_type> figchars;
-            char_type hb = figlet.font->getHardBlank();
-            size_type hg = figlet.font->getHeight();
-            size_type sk = figlet.font->getShrink();
+            char_type hb = this->font->getHardBlank();
+            size_type hg = this->font->getHeight();
+            size_type sk = this->font->getShrink();
 
-            for (auto ch : figlet.str)
+            for (auto ch : str)
             {
-                figchars.push_back(figlet.font->getFigc(ch));
+                figchars.push_back(this->font->getFigc(ch));
             }
 
-            Figs_type figs = figlet.style->getFigs(figchars, hb, hg, sk);
+            Figs_type figs = this->style->getFigs(figchars, hb, hg, sk);
+
+            sstream_type stream;
 
             for (const auto &str : figs)
             {
-                os << str << "\n";
+                stream << str << "\n";
             }
 
-            return os;
-        }
-
-        /**
-         * @brief Get the String object
-         * 
-         * @return string_type as string
-         */
-        string_type getString() const
-        {
-            sstream_type stream;
-            stream << *this;
-            return stream.str(); 
+            return stream.str();
         }
     };
 
     /**
      * @brief BasicFigletFont
-     * 
-     * @tparam StringType 
+     *
+     * @tparam StringType
      */
     template <class StringType>
     class BasicFigletFont : public BasicFont<StringType>
@@ -286,8 +260,8 @@ namespace srilakshmikanthanp
 
         /**
          * @brief reads settings
-         * 
-         * @param stream 
+         *
+         * @param stream
          */
         void start(std::basic_istream<char_type, traits_type> &stream)
         {
@@ -336,7 +310,7 @@ namespace srilakshmikanthanp
 
         /**
          * @brief next character from font
-         * 
+         *
          * @param stream stream
          * @return Figc_type figlt character
          */
@@ -383,12 +357,21 @@ namespace srilakshmikanthanp
 
         /**
          * @brief Construct a new BasicFiglet BasicFont
-         * 
-         * @param font 
+         *
+         * @param stream stream of data
+         */
+        BasicFigletFont(std::basic_stringstream<char_type, traits_type> stream)
+        {
+            this->read(stream);
+        }
+
+        /**
+         * @brief Construct a new BasicFiglet BasicFont
+         *
+         * @param font
          */
         BasicFigletFont(string_type font)
         {
-            std::basic_istringstream<char_type, traits_type> sstream(font);
             std::basic_ifstream<char_type, traits_type> stream(font);
 
             if (stream.is_open())
@@ -397,13 +380,13 @@ namespace srilakshmikanthanp
             }
             else
             {
-                this->read(sstream);
+                throw std::runtime_error(font + " not found !");
             }
         }
 
         /**
          * @brief Get the Hard Blank character
-         * 
+         *
          * @return char_type hardblank
          */
         char_type getHardBlank() const override
@@ -413,7 +396,7 @@ namespace srilakshmikanthanp
 
         /**
          * @brief Get the Height
-         * 
+         *
          * @return size_type height
          */
         size_type getHeight() const override
@@ -423,7 +406,7 @@ namespace srilakshmikanthanp
 
         /**
          * @brief Get the Shrink
-         * 
+         *
          * @return size_type shrink value
          * 0 - untouched
          * 1 - kerning
@@ -436,7 +419,7 @@ namespace srilakshmikanthanp
 
         /**
          * @brief Get the BasicFiglet character
-         * 
+         *
          * @return Figc_type BasicFiglet character
          */
         Figc_type getFigc(char_type ch) const override
@@ -447,8 +430,18 @@ namespace srilakshmikanthanp
 
         /**
          * @brief A factory for this type return smart pointer to this type
-         * 
-         * @return std::shared_ptr<BasicFigletFont<string_type>> 
+         *
+         * @return std::shared_ptr<BasicFigletFont<string_type>>
+         */
+        static std::shared_ptr<BasicFigletFont<string_type>> make(std::basic_stringstream<char_type, traits_type> stream)
+        {
+            return std::make_shared<BasicFigletFont<string_type>>(stream);
+        }
+
+        /**
+         * @brief A factory for this type return smart pointer to this type
+         *
+         * @return std::shared_ptr<BasicFigletFont<string_type>>
          */
         static std::shared_ptr<BasicFigletFont<string_type>> make(std::string font)
         {
@@ -458,8 +451,8 @@ namespace srilakshmikanthanp
 
     /**
      * @brief Full Width BasicStyle
-     * 
-     * @tparam StringType 
+     *
+     * @tparam StringType
      */
     template <class StringType>
     class BasicFullWidth : public BasicStyle<StringType>
@@ -475,7 +468,7 @@ namespace srilakshmikanthanp
     protected:
         /**
          * @brief convert ascii string to string_type
-         * 
+         *
          * @param str string to convert
          * @return string_type string converted
          */
@@ -486,7 +479,7 @@ namespace srilakshmikanthanp
 
         /**
          * @brief checks height offig character
-         * 
+         *
          * @param figc fig character
          * @param hg height
          */
@@ -500,7 +493,7 @@ namespace srilakshmikanthanp
 
         /**
          * @brief removes hardblank from figstring
-         * 
+         *
          * @param figs fig string
          * @param hb hardblank
          */
@@ -519,7 +512,7 @@ namespace srilakshmikanthanp
 
         /**
          * @brief Get the Shrink
-         * 
+         *
          * @return size_type shrink value
          * 0 - untouched
          * 1 - kerning
@@ -532,19 +525,14 @@ namespace srilakshmikanthanp
 
         /**
          * @brief Get the Fig string
-         * 
+         *
          * @param figchs figlet characters
          * @param hardblank hardblank
          * @param height height
          * @param shirnk shrinkklevel
          * @return Figs_type Fig string
          */
-        Figs_type getFigs (
-            std::vector<Figc_type> figchs,
-            char_type hardblank,
-            size_type height,
-            size_type shirnk
-        ) const override
+        Figs_type getFigs(std::vector<Figc_type> figchs, char_type hardblank, size_type height, size_type shirnk) const override
         {
             Figs_type figs(height, cvt(""));
 
@@ -567,8 +555,8 @@ namespace srilakshmikanthanp
 
         /**
          * @brief A factory for this type return smart pointer to this type
-         * 
-         * @return std::shared_ptr<BasicFullWidth<string_type>> 
+         *
+         * @return std::shared_ptr<BasicFullWidth<string_type>>
          */
         static std::shared_ptr<BasicFullWidth<string_type>> make()
         {
@@ -578,9 +566,9 @@ namespace srilakshmikanthanp
 
     /**
      * @brief kerned BasicStyle
-     * 
+     *
      * @tparam gap gap between characters
-     * @tparam StringType 
+     * @tparam StringType
      */
     template <class StringType>
     class BasicKerning : public BasicFullWidth<StringType>
@@ -599,7 +587,7 @@ namespace srilakshmikanthanp
     protected:
         /**
          * @brief trims in a deep
-         * 
+         *
          * @param figs fig string
          * @param figc fig character
          */
@@ -649,7 +637,7 @@ namespace srilakshmikanthanp
     public:
         /**
          * @brief Construct a new BasicKerning
-         * 
+         *
          * @param gap gap size
          */
         BasicKerning(size_type gap = 0) : gap(gap) {}
@@ -658,7 +646,7 @@ namespace srilakshmikanthanp
 
         /**
          * @brief Get the Shrink
-         * 
+         *
          * @return size_type shrink value
          * 0 - untouched
          * 1 - kerning
@@ -671,19 +659,14 @@ namespace srilakshmikanthanp
 
         /**
          * @brief Get the Fig string
-         * 
+         *
          * @param figchs figlet characters
          * @param hardblank hardblank
          * @param height height
          * @param shirnk shrinkklevel
          * @return Figs_type Fig string
          */
-        Figs_type getFigs (
-            std::vector<Figc_type> figchs,
-            char_type hardblank,
-            size_type height,
-            size_type shirnk
-        ) const override
+        Figs_type getFigs(std::vector<Figc_type> figchs, char_type hb, size_type height, size_type shirnk) const override
         {
             Figs_type figs(height, this->cvt(""));
 
@@ -702,14 +685,14 @@ namespace srilakshmikanthanp
                 }
             }
 
-            this->remove_hardblank(figs, hardblank);
+            this->remove_hardblank(figs, hb);
             return figs;
         }
 
         /**
          * @brief A factory for this type return smart pointer to this type
-         * 
-         * @return std::shared_ptr<BasicKerning<string_type>> 
+         *
+         * @return std::shared_ptr<BasicKerning<string_type>>
          */
         static std::shared_ptr<BasicKerning<string_type>> make(size_type gap)
         {
@@ -719,8 +702,8 @@ namespace srilakshmikanthanp
 
     /**
      * @brief Smushing style
-     * 
-     * @tparam StringType 
+     *
+     * @tparam StringType
      */
     template <class StringType>
     class BasicSmushed : public BasicKerning<StringType>
@@ -771,7 +754,8 @@ namespace srilakshmikanthanp
             }
 
             //(Hierarchy Smushing)
-            auto find_class = [](char_type ch) -> size_type {
+            auto find_class = [](char_type ch) -> size_type
+            {
                 if (ch == '|')
                 {
                     return 1;
@@ -866,9 +850,9 @@ namespace srilakshmikanthanp
 
         /**
          * @brief smush algoriths on kerned Fig string and character
-         * 
-         * @param figs 
-         * @param figc 
+         *
+         * @param figs
+         * @param figc
          */
         void smush(Figs_type &figs, Figc_type figc, char_type hb) const
         {
@@ -911,19 +895,14 @@ namespace srilakshmikanthanp
         BasicSmushed(BasicSmushed &&) = default;
         /**
          * @brief Get the Fig string
-         * 
+         *
          * @param figchs figlet characters
          * @param hardblank hardblank
          * @param height height
          * @param shirnk shrinkklevel
          * @return Figs_type Fig string
          */
-        Figs_type getFigs (
-            std::vector<Figc_type> figchs,
-            char_type hardblank,
-            size_type height,
-            size_type shirnk
-        ) const override
+        Figs_type getFigs(std::vector<Figc_type> figchs, char_type hardblank, size_type height, size_type shirnk) const override
         {
             Figs_type figs(height, this->cvt(""));
 
@@ -944,8 +923,8 @@ namespace srilakshmikanthanp
 
         /**
          * @brief A factory for this type return smart pointer to this type
-         * 
-         * @return std::shared_ptr<BasicSmushed<string_type>> 
+         *
+         * @return std::shared_ptr<BasicSmushed<string_type>>
          */
         static std::shared_ptr<BasicSmushed<string_type>> make()
         {
