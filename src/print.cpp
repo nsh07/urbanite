@@ -20,14 +20,14 @@
 using srilakshmikanthanp::FigletFont;
 using srilakshmikanthanp::Smushed;
 
-void printDefinition(nm::Urban& urban, std::string likeChar, std::string dislikeChar, int index)
+void printDefinition(nm::Urban& urban, std::string likeChar, std::string dislikeChar, std::string ratioStr, int index)
 {
     double likeDislikeRatio = 0, likeDislikePercentage = 0;
     double totalVote = urban.getThumbsUp(index) + urban.getThumbsDown(index);
 
     std::string thumbUp = " " + likeChar + " ";
     std::string thumbDown = "    " + dislikeChar + " ";
-    std::string ratio = "    " + likeChar + "/" + dislikeChar + " ";
+    std::string ratio = "    " + ratioStr + " ";
     
     if (urban.getThumbsDown(index) != 0) 
         likeDislikeRatio = roundToPlaces((double) urban.getThumbsUp(index)/urban.getThumbsDown(index), 2);
@@ -44,5 +44,5 @@ void printDefinition(nm::Urban& urban, std::string likeChar, std::string dislike
 void printTitle(nm::Urban& urban, std::string fontFile, int index)
 {
     srilakshmikanthanp::Figlet figlet(FigletFont::make(fontFile), Smushed::make());
-    std::cout << figlet(urban.getWord(index));
+    std::cout << figlet(urban.getWord(index)) << std::endl;
 }

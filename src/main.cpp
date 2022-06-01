@@ -21,8 +21,15 @@
 #ifndef PREFIX_DIR /* PREFIX_DIR should be defined at compile time. If not: */
 #define PREFIX_DIR "/usr"
 #endif
+#ifndef FIGLET_DIR /* Same with the figlet font directory */
+#define FIGLET_DIR "/usr/share/figlet"
+#endif
 
 #include <filesystem>
+#include <map>
+#include <string>
+#include <vector>
+
 #include <getopt.h>
 
 #include "../include/help.hpp"
@@ -34,27 +41,35 @@ int main(int argc, char *argv[])
     static nm::Initializer init; // Initialize Urban++ transfer environment
 
     int ret, index;
-    std::string searchTerm = "", fontFile = "standard.flf";
-    const std::string figletFontDir = "/usr/share/figlet/";
+    std::string searchTerm = "", emojiStyle = "emoji", fontFile = "standard.flf";
+    const std::string figletFontDir = FIGLET_DIR "/";
     const std::string urbaniteFontDir = PREFIX_DIR "/share/urbanite/";
 
     struct option longOptions[] // Long options
     {
-        {"font-file", required_argument, 0, 'f'},
-        {"help",      no_argument,       0, 'h'},
-        {"version",   no_argument,       0, 'v'},
+        {"emoji-style", required_argument, 0, 'e'},
+        {"font-file",   required_argument, 0, 'f'},
+        {"help",        no_argument,       0, 'h'},
+        {"version",     no_argument,       0, 'v'},
         {0, 0, 0, 0}
     };
 
-    while ((ret = getopt_long(argc, argv, "f:hv?", longOptions, &index)) != -1)
+    while ((ret = getopt_long(argc, argv, "e:f:hv?", longOptions, &index)) != -1)
     {
         switch (ret)
         {
+            case 'e':
+            emojiStyle = optarg;
+            break;
+
             case 'f': // Set font file
             fontFile = optarg;
             break;
 
             case '?': // Help
+            std::cout << "Run " << argv[0] << " --help for more info.\n";
+            return 0;
+
             case 'h':
             std::cout << helpStr(argv[0]);
             return 0;
@@ -100,6 +115,13 @@ int main(int argc, char *argv[])
     }
     else fontFile = urbaniteFontDir + fontFile;
 
+    std::map<std::string, std::vector<std::string>> emojiMap =
+    {
+        { "emoji",       {"👍", "👎", "👍/👎"} }, 
+        { "unicode",     {"↑", "↓", "↑↓"} },
+        { "unicode-alt", {"↿", "⇂", "↿⇂"} },
+        { "nerd-font",   {" ", " ", "﨔"} }
+    };
     nm::Urban urban;
 
     urban.setSearchTerm(searchTerm);
@@ -107,11 +129,11 @@ int main(int argc, char *argv[])
 
     if (err == CURLE_OK) { // If transfer successful
         printTitle(urban, fontFile); // Print the word (title)
-        printDefinition(urban, "👍", "👎");   // and the definition
+        printDefinition(urban, emojiMap[emojiStyle][0], emojiMap[emojiStyle][1], emojiMap[emojiStyle][2]);   // and the definition
         return 0;
     }
     if (err == CURLE_GOT_NOTHING) {
-        std::cerr << argv[0] << "No search results found for word/phrase \"" << searchTerm << "\"\e[0m\n";
+        std::cerr << argv[0] << ": No search results found for word/phrase \"" << searchTerm << "\"\e[0m\n";
         return 1;
     }
     else std::cerr << argv[0] << ": (" << err << ") " << curl_easy_strerror(err) << "\n";

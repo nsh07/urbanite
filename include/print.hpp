@@ -17,7 +17,7 @@
 
 #include "urban++.hpp"
 
-void printDefinition(nm::Urban& urban, std::string likeChar, std::string dislikeChar, int index=0); // Function to print definition of given word
+void printDefinition(nm::Urban& urban, std::string likeChar, std::string dislikeChar, std::string ratioStr, int index=0); // Function to print definition of given word
 void printTitle(nm::Urban& urban, std::string fontFile, int index=0); // Function to print word in Figlet style
 
 #endif

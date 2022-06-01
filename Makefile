@@ -3,13 +3,15 @@ bindir = $(prefix)/bin
 sharedir = $(prefix)/share/urbanite
 
 mkdiropts = -vp
+figletdir = /usr/share/figlet
 
 BIN = bin
 OBJ = obj
 SRC = src
+FONT = fonts
 
 CC = g++
-CFLAGS = -std=c++17 -O2 -Wall -DPREFIX_DIR=\"$(prefix)\"
+CFLAGS = -std=c++17 -O2 -Wall -DPREFIX_DIR=\"$(prefix)\" -DFIGLET_DIR=\"$(figletdir)\"
 
 LIBS = -lcurl
 
@@ -41,11 +43,11 @@ install:
 	@echo "\e[90minstall $(BIN)/urbanite $(bindir)\e[0m"
 	@install $(BIN)/urbanite $(bindir)
 	
-	@echo "Installing the default Urbanite font file in $(sharedir)..."
+	@echo "Installing the default fonts in $(sharedir)..."
 	@echo "\e[90mmkdir $(mkdiropts) $(sharedir)"
 	@mkdir $(mkdiropts) $(sharedir)
-	@echo "install ./standard.flf $(sharedir)"
-	@install ./standard.flf $(sharedir)
+	@echo "install $(FONT)/* $(sharedir)"
+	@install $(FONT)/* $(sharedir)
 	@echo "\e[0m...done"
 
 uninstall:
