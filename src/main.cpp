@@ -41,17 +41,30 @@ int main(int argc, char *argv[])
     static nm::Initializer init; // Initialize Urban++ transfer environment
 
     int ret, index;
-    std::string searchTerm = "", emojiStyle = "emoji", fontFile = "standard.flf";
-    const std::string figletFontDir = FIGLET_DIR "/";
+    std::string searchTerm = "", emojiStyle = "emoji", fontFile = "standard.flf"; // Strings required later
+    const std::string figletFontDir = FIGLET_DIR "/"; // Directories
     const std::string urbaniteFontDir = PREFIX_DIR "/share/urbanite/";
 
     struct option longOptions[] // Long options
     {
-        {"emoji-style", required_argument, 0, 'e'},
-        {"font-file",   required_argument, 0, 'f'},
-        {"help",        no_argument,       0, 'h'},
+        {"emoji-style", required_argument, 0, 'e'}, // Set the style of the symbols used (emojiStyle variable)
+        {"font-file",   required_argument, 0, 'f'}, // Set the fontFile variable
+        {"help",        no_argument,       0, 'h'}, // Self-explanatory
         {"version",     no_argument,       0, 'v'},
+
+        {"emoji-likes",    required_argument, 0, 128},
+        {"emoji-dislikes", required_argument, 0, 129},
+        {"emoji-ratio",    required_argument, 0, 130},
         {0, 0, 0, 0}
+    };
+    
+    std::map<std::string, std::vector<std::string>> emojiMap =
+    {
+        { "emoji",       {"👍", "👎", "👍/👎"} }, 
+        { "unicode",     {"↑", "↓", "↑↓"} },
+        { "unicode-alt", {"↿", "⇂", "↿⇂"} },
+        { "nerd-font",   {" ", " ", "﨔"} },
+        { "custom",      {"👍", "👎", "👍/👎"} }
     };
 
     while ((ret = getopt_long(argc, argv, "e:f:hv?", longOptions, &index)) != -1)
@@ -66,16 +79,28 @@ int main(int argc, char *argv[])
             fontFile = optarg;
             break;
 
-            case '?': // Help
-            std::cout << "Run " << argv[0] << " --help for more info.\n";
-            return 0;
-
             case 'h':
             std::cout << helpStr(argv[0]);
             return 0;
 
             case 'v': // Version
             std::cout << versionStr();
+            return 0;
+
+            case 128: // --emoji-likes
+            emojiMap["custom"][0] = optarg;
+            break;
+
+            case 129: // --emoji-dislikes
+            emojiMap["custom"][1] = optarg;
+            break;
+
+            case 130: // --emoji-ratio
+            emojiMap["custom"][2] = optarg;
+            break;
+
+            case '?': // Help
+            std::cout << "Run " << argv[0] << " --help for more info.\n";
             return 0;
         }
     }
@@ -115,13 +140,6 @@ int main(int argc, char *argv[])
     }
     else fontFile = urbaniteFontDir + fontFile;
 
-    std::map<std::string, std::vector<std::string>> emojiMap =
-    {
-        { "emoji",       {"👍", "👎", "👍/👎"} }, 
-        { "unicode",     {"↑", "↓", "↑↓"} },
-        { "unicode-alt", {"↿", "⇂", "↿⇂"} },
-        { "nerd-font",   {" ", " ", "﨔"} }
-    };
     nm::Urban urban;
 
     urban.setSearchTerm(searchTerm);

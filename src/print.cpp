@@ -44,5 +44,5 @@ void printDefinition(nm::Urban& urban, std::string likeChar, std::string dislike
 void printTitle(nm::Urban& urban, std::string fontFile, int index)
 {
     srilakshmikanthanp::Figlet figlet(FigletFont::make(fontFile), Smushed::make());
-    std::cout << figlet(urban.getWord(index)) << std::endl;
+    std::cout << figlet(urban.getWord(index));
 }
