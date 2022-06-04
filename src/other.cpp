@@ -16,4 +16,16 @@ double roundToPlaces(double decimal, int places)
 {
     double multiplier = std::pow(10, places);
     return std::ceil(decimal * multiplier) / multiplier;
+};
+
+bool findInVector(std::string str, std::vector<std::string> vector)
+{
+    for (auto i:vector)
+    {
+        if (i == str)
+        {
+            return true;
+        }
+    };
+    return false;
 }

@@ -33,6 +33,7 @@
 #include <getopt.h>
 
 #include "../include/help.hpp"
+#include "../include/other.hpp"
 #include "../include/print.hpp"
 #include "../include/urban++.hpp"
 
@@ -66,14 +67,19 @@ int main(int argc, char *argv[])
         { "nerd-font",   {" ", " ", "﨔"} },
         { "custom",      {"👍", "👎", "👍/👎"} }
     };
+    std::vector<std::string> emojiChoices = {"emoji", "unicode", "unicode-alt", "nerd-font", "custom"};
 
     while ((ret = getopt_long(argc, argv, "e:f:hv?", longOptions, &index)) != -1)
     {
         switch (ret)
         {
             case 'e':
-            emojiStyle = optarg;
-            break;
+            if(findInVector(optarg, emojiChoices)) {
+                emojiStyle = optarg;
+                break;
+            }
+            std::cerr << argv[0] << ": Invalid symbol style -- " << optarg << std::endl;
+            return 1;
 
             case 'f': // Set font file
             fontFile = optarg;

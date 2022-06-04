@@ -13,6 +13,10 @@
 #ifndef OTHER_HPP
 #define OTHER_HPP
 
+#include <string>
+#include <vector>
+
 double roundToPlaces(double decimal, int places);
+bool findInVector(std::string str, std::vector<std::string> vector);
 
 #endif
