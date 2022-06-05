@@ -3,7 +3,6 @@ bindir = $(prefix)/bin
 sharedir = $(prefix)/share/urbanite
 
 mkdiropts = -vp
-figletdir = /usr/share/figlet
 
 BIN = bin
 OBJ = obj
@@ -11,7 +10,7 @@ SRC = src
 FONT = fonts
 
 CC = g++
-CFLAGS = -std=c++17 -O2 -Wall -DPREFIX_DIR=\"$(prefix)\" -DFIGLET_DIR=\"$(figletdir)\"
+CFLAGS = -std=c++17 -O2 -Wall -DPREFIX_DIR=\"$(prefix)\"
 
 LIBS = -lcurl
 

@@ -1,12 +1,9 @@
 #include "../include/help.hpp"
 #include <string>
 
-#define URBANITE_VERSION "v1.2.0"
+#define URBANITE_VERSION "v1.3.0"
 #ifndef PREFIX_DIR /* PREFIX_DIR should be defined at compile time. If not: */
 #define PREFIX_DIR "/usr"
-#endif
-#ifndef FIGLET_DIR /* Same with the figlet font directory */
-#define FIGLET_DIR "/usr/share/figlet"
 #endif
 
 std::string helpStr(std::string progName)
@@ -47,8 +44,7 @@ std::string helpStr(std::string progName)
     "A \"font file\" in the context of this program is a figlet font file (.flf).\n"
     "If a file name is passed, the file is searched in the following order:\n"
     "1. " PREFIX_DIR "/share/urbanite\n"
-    "2. " FIGLET_DIR "\n"
-    "3. Current directory\n"
+    "2. Current directory\n"
     "If it is not found in any of these directories, the program exits with an error.\n";
 }
 
@@ -64,6 +60,5 @@ std::string versionStr()
     "under certain conditions. See http://www.gnu.org/licenses/ for more info.\n\n"
     "Compile-time options:\n"
     "Filesystem prefix directory: " PREFIX_DIR "\n"
-    "└─ Urbanite share directory: " PREFIX_DIR "/share/urbanite\n"
-    "Figlet share directory: " FIGLET_DIR "\n";
+    "└─ Urbanite share directory: " PREFIX_DIR "/share/urbanite\n";
 }
