@@ -21,9 +21,6 @@
 #ifndef PREFIX_DIR /* PREFIX_DIR should be defined at compile time. If not: */
 #define PREFIX_DIR "/usr"
 #endif
-#ifndef FIGLET_DIR /* Same with the figlet font directory */
-#define FIGLET_DIR "/usr/share/figlet"
-#endif
 
 #include <filesystem>
 #include <map>
@@ -43,7 +40,6 @@ int main(int argc, char *argv[])
 
     int ret, index;
     std::string searchTerm = "", emojiStyle = "emoji", fontFile = "standard.flf"; // Strings required later
-    const std::string figletFontDir = FIGLET_DIR "/"; // Directories
     const std::string urbaniteFontDir = PREFIX_DIR "/share/urbanite/";
 
     struct option longOptions[] // Long options
@@ -129,8 +125,7 @@ int main(int argc, char *argv[])
     /*
     Font file setting algorithm. Prioritizes directories in the following order:
     1. PREFIX_DIR/share/urbanite/
-    2. /usr/share/figlet/
-    3. current directory
+    2. current directory
 
     This, however, breaks support on OSs other than Linux distributions because of the directory
     structure assumptions. Will fix cross-platform compatibility later.
@@ -138,8 +133,7 @@ int main(int argc, char *argv[])
     filesystem library)
     */
     if (!(std::filesystem::exists(urbaniteFontDir + fontFile))) {
-        if (std::filesystem::exists(figletFontDir + fontFile)) fontFile = figletFontDir + fontFile;
-        else if (!(std::filesystem::exists(fontFile))) {
+        if (!(std::filesystem::exists(fontFile))) {
             std::cerr << argv[0] << ": Invalid font file \"" << fontFile << "\"\n";
             return 1;
         }
