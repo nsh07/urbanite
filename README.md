@@ -4,6 +4,8 @@
 
 Search words on Urban Dictionary at the comfort of your terminal.
 
+![Urbanite demo](media/urbanite-demo.gif)
+
 ---
 
 Urbanite is a program for searching words and their definitions on [Urban Dictionary](https://www.urbandictionary.com/) within a terminal emulator/shell. Now you never need to leave your cozy terminal window to search for your memes.
