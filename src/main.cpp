@@ -49,9 +49,10 @@ int main(int argc, char *argv[])
         {"help",        no_argument,       0, 'h'}, // Self-explanatory
         {"version",     no_argument,       0, 'v'},
 
-        {"emoji-likes",    required_argument, 0, 128},
+        {"emoji-likes",    required_argument, 0, 128}, // Custom emoji options
         {"emoji-dislikes", required_argument, 0, 129},
         {"emoji-ratio",    required_argument, 0, 130},
+        {"dumpversion",    no_argument,       0, 131},
         {0, 0, 0, 0}
     };
     
@@ -101,6 +102,9 @@ int main(int argc, char *argv[])
             emojiMap["custom"][2] = optarg;
             break;
 
+            case 131:
+            std::cout << dumpVersion() << std::endl;
+
             case '?': // Help
             std::cout << "Run " << argv[0] << " --help for more info.\n";
             return 0;
@@ -127,7 +131,7 @@ int main(int argc, char *argv[])
     1. PREFIX_DIR/share/urbanite/
     2. current directory
 
-    This, however, breaks support on OSs other than Linux distributions because of the directory
+    This, however, breaks support on Windows because of the directory
     structure assumptions. Will fix cross-platform compatibility later.
     Also, this requires the C++ standard to be set to C++17 in the compiler options (for the
     filesystem library)

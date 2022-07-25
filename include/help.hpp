@@ -5,5 +5,6 @@
 
 std::string helpStr(std::string progName);
 std::string versionStr();
+std::string dumpVersion();
 
 #endif
