@@ -37,6 +37,15 @@ $(OBJ):
 	@echo "\e[90mmkdir $(mkdiropts) $(OBJ)\e[0m"
 	@mkdir $(mkdiropts) $(OBJ)
 
+tarball: $(BIN)/urbanite
+	@echo "Creating tarball..."
+	@echo "\e[90mtar -cv -f bin/urbanite.tar bin/urbanite fonts Makefile"
+	@tar -cv -f bin/urbanite.tar bin/urbanite fonts Makefile
+	@echo "\e[0mCompressing tarball..."
+	@echo "\e[90mxz -vf bin/urbanite.tar"
+	@xz -vf bin/urbanite.tar
+	@echo "\e[0m...done"
+
 install:
 	@echo "Installing Urbanite in $(bindir)..."
 	@echo "\e[90minstall $(BIN)/urbanite $(bindir)\e[0m"
