@@ -14,7 +14,7 @@ CFLAGS = -std=c++17 -O2 -Wall -DPREFIX_DIR=\"$(prefix)\"
 
 LIBS = -lcurl
 
-.PHONY: all install uninstall clean
+.PHONY: all tarball deb install uninstall clean
 
 all: $(BIN)/urbanite
 
@@ -45,6 +45,11 @@ tarball: $(BIN)/urbanite
 	@echo "\e[90mxz -vf bin/urbanite.tar"
 	@xz -vf bin/urbanite.tar
 	@echo "\e[0m...done"
+
+deb: $(BIN)/urbanite
+	@echo "Running build-deb script..."
+	@bash ./build-deb.sh 
+	@echo "...done"
 
 install:
 	@echo "Installing Urbanite in $(bindir)..."
