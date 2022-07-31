@@ -104,6 +104,7 @@ int main(int argc, char *argv[])
 
             case 131:
             std::cout << dumpVersion() << std::endl;
+            return 0;
 
             case '?': // Help
             std::cout << "Run " << argv[0] << " --help for more info.\n";
