@@ -1,7 +1,7 @@
 #include "../include/help.hpp"
 #include <string>
 
-#define URBANITE_VERSION "v1.3.0"
+#define URBANITE_VERSION "1.3.1"
 #ifndef PREFIX_DIR /* PREFIX_DIR should be defined at compile time. If not: */
 #define PREFIX_DIR "/usr"
 #endif
@@ -21,7 +21,9 @@ std::string helpStr(std::string progName)
     "  -f, --font-file=FONT  Set the figlet font file to use for printing the word.\n"
     "                        See the \"Using Figlet Fonts\" section below\n"
     "  -h, --help            Show this help and exit\n"
-    "  -v, --version         Print version info and options set at compile-time\n\n"
+    "  -v, --version         Print version info and options set at compile-time\n"
+    "  --dumpversion         Print the version number and quit. Useful for scripting\n"
+    "                        purposes, you would generally use --version otherwise.\n\n"
     "Custom symbol options:\n"
     "You can set the -e option to \"custom\" to use you own characters as the symbols\n"
     "for the like/dislike count. Symbol in the context of this program is a string\n"
@@ -53,7 +55,7 @@ std::string versionStr()
     return
     "Urbanite - search words on Urban Dictionary at the comfort of your terminal\n"
     "https://github.com/NMrocks/urbanite\n"
-    URBANITE_VERSION "\n"
+    "v" URBANITE_VERSION "\n"
     "Copyright (C) 2021, 2022 Nishant Mishra <https://github.com/NMrocks>\n"
     "This program comes with ABSOLUTELY NO WARRANTY.\n"
     "This is free software, and you are welcome to redistribute it\n"
@@ -62,3 +64,5 @@ std::string versionStr()
     "Filesystem prefix directory: " PREFIX_DIR "\n"
     "└─ Urbanite share directory: " PREFIX_DIR "/share/urbanite\n";
 }
+
+std::string dumpVersion() { return URBANITE_VERSION; }

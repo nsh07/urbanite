@@ -9,6 +9,7 @@
 */
 
 #include <iostream>
+#include <stdexcept>
 #include <string>
 
 #include "../include/Figlet.hpp"
@@ -19,6 +20,8 @@
 
 using srilakshmikanthanp::FigletFont;
 using srilakshmikanthanp::Smushed;
+using srilakshmikanthanp::Kerning;
+using srilakshmikanthanp::FullWidth;
 
 void printDefinition(nm::Urban& urban, std::string likeChar, std::string dislikeChar, std::string ratioStr, int index)
 {
@@ -43,6 +46,34 @@ void printDefinition(nm::Urban& urban, std::string likeChar, std::string dislike
 
 void printTitle(nm::Urban& urban, std::string fontFile, int index)
 {
-    srilakshmikanthanp::Figlet figlet(FigletFont::make(fontFile), Smushed::make());
-    std::cout << figlet(urban.getWord(index));
+    /*
+    Prints the word ("Title" of the output) in the Figlet style.
+    Some figlet fonts don't support the smushed and kerning style, so a nested try-catch must be used
+    (I didn't have a better solution for this :P)
+    Runs like so:
+    1. First try to print the word smushed, and return
+    2. If runtime_error occurs, try printing the word in the "kerning" style, then return
+    3. If runtime_error occurs again, try printing in the full width style, them return
+    4. If runtime_error occurs yet again, print the error to stderr and the word in plain text to stderr
+    */
+    try {
+        srilakshmikanthanp::Figlet figlet(FigletFont::make(fontFile), Smushed::make());
+        std::cout << figlet(urban.getWord(index));
+    }
+    catch (const std::runtime_error& error) {
+        try {
+            srilakshmikanthanp::Figlet figlet(FigletFont::make(fontFile), Kerning::make(1));
+            std::cout << figlet(urban.getWord(index));
+        }
+        catch (const std::runtime_error& error2) {
+            try {
+                srilakshmikanthanp::Figlet figlet(FigletFont::make(fontFile), FullWidth::make());
+                std::cout << figlet(urban.getWord(index));
+            }
+            catch (const std::runtime_error& error3) {
+                std::cerr << "urbanite: Figlet error -- " << error3.what() << std::endl;
+                std::cout << urban.getWord(index) << std::endl;
+            }
+        }
+    }
 }
