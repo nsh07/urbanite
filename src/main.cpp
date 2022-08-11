@@ -40,10 +40,12 @@ int main(int argc, char *argv[])
 
     int ret, index;
     std::string searchTerm = "", emojiStyle = "emoji", fontFile = "standard.flf"; // Strings required later
+    bool allResults = false;
     const std::string urbaniteFontDir = PREFIX_DIR "/share/urbanite/";
 
     struct option longOptions[] // Long options
     {
+        {"all-results", no_argument,       0, 'a'},
         {"emoji-style", required_argument, 0, 'e'}, // Set the style of the symbols used (emojiStyle variable)
         {"font-file",   required_argument, 0, 'f'}, // Set the fontFile variable
         {"help",        no_argument,       0, 'h'}, // Self-explanatory
@@ -66,10 +68,14 @@ int main(int argc, char *argv[])
     };
     std::vector<std::string> emojiChoices = {"emoji", "unicode", "unicode-alt", "nerd-font", "custom"};
 
-    while ((ret = getopt_long(argc, argv, "e:f:hv?", longOptions, &index)) != -1)
+    while ((ret = getopt_long(argc, argv, "ae:f:hv?", longOptions, &index)) != -1)
     {
         switch (ret)
         {
+            case 'a':
+            allResults = true;
+            break;
+
             case 'e':
             if(findInVector(optarg, emojiChoices)) {
                 emojiStyle = optarg;
@@ -152,7 +158,14 @@ int main(int argc, char *argv[])
 
     if (err == CURLE_OK) { // If transfer successful
         printTitle(urban, fontFile); // Print the word (title)
-        printDefinition(urban, emojiMap[emojiStyle][0], emojiMap[emojiStyle][1], emojiMap[emojiStyle][2]);   // and the definition
+        if(allResults) { // --all-results passed
+            for (int i=0; i < urban.sizeOfJSON(); ++i) {
+                printDefinition(urban, emojiMap[emojiStyle][0], emojiMap[emojiStyle][1], emojiMap[emojiStyle][2], i);
+                std::cout << "\n----------\n\n";
+            };
+            return 0;
+        }
+        printDefinition(urban, emojiMap[emojiStyle][0], emojiMap[emojiStyle][1], emojiMap[emojiStyle][2]);
         return 0;
     }
     if (err == CURLE_GOT_NOTHING) {
