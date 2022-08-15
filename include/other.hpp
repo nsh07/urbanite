@@ -18,5 +18,6 @@
 
 double roundToPlaces(double decimal, int places);
 bool findInVector(std::string str, std::vector<std::string> vector);
+bool isNumeric(std::string str);
 
 #endif

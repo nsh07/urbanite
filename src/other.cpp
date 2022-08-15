@@ -9,6 +9,7 @@
 */
 
 #include <cmath>
+#include <string>
 
 #include "../include/other.hpp"
 
@@ -28,4 +29,14 @@ bool findInVector(std::string str, std::vector<std::string> vector)
         }
     };
     return false;
+}
+
+bool isNumeric(std::string str)
+{
+    for (auto i:str)
+    {
+        if (!std::isdigit(i))
+            return false;
+    }
+    return true;
 }
