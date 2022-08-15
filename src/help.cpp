@@ -1,7 +1,7 @@
 #include "../include/help.hpp"
 #include <string>
 
-#define URBANITE_VERSION "1.4.0"
+#define URBANITE_VERSION "1.4.1"
 #ifndef PREFIX_DIR /* PREFIX_DIR should be defined at compile time. If not: */
 #define PREFIX_DIR "/usr"
 #endif
