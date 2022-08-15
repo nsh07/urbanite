@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
         }
         
         if (noOfResults) { // --no-of-results passed
-            if (noOfResults >= urban.sizeOfJSON()) {
+            if (noOfResults > urban.sizeOfJSON()) {
                 std::cerr << "Provided number of results (" << noOfResults << ") too large, showing max number of results (" << urban.sizeOfJSON() << ")\n";
                 noOfResults = urban.sizeOfJSON();
             }
