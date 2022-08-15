@@ -1,7 +1,7 @@
 #include "../include/help.hpp"
 #include <string>
 
-#define URBANITE_VERSION "1.3.1"
+#define URBANITE_VERSION "1.4.0"
 #ifndef PREFIX_DIR /* PREFIX_DIR should be defined at compile time. If not: */
 #define PREFIX_DIR "/usr"
 #endif
@@ -15,7 +15,8 @@ std::string helpStr(std::string progName)
     "Mandatory arguments to long options are mandatory for short options too.\n"
     "  -a, --all-results     Print all results found for the given word. It is\n"
     "                        recommended to pipe the output to a pager like `less` to\n"
-    "                        avoid flooding the screen with search results.\n"
+    "                        avoid flooding the screen with search results. This\n"
+    "                        option overrides --number-of-results (see below).\n"
     "  -e, --emoji-style=STYLE\n"
     "                        Set the \"style\" of the emojis/symbols used to show the\n"
     "                        vote count. STYLE is one of emoji (default), unicode,\n"
@@ -24,6 +25,9 @@ std::string helpStr(std::string progName)
     "  -f, --font-file=FONT  Set the figlet font file to use for printing the word.\n"
     "                        See the \"Using Figlet Fonts\" section below\n"
     "  -h, --help            Show this help and exit\n"
+    "  -n, --number-of-results=INTEGER\n"
+    "                        Prints the first INTEGER number of search results. If\n"
+    "                        --all-results is passed, this option has no effect.\n"
     "  -v, --version         Print version info and options set at compile-time\n"
     "  --dumpversion         Print the version number and quit. Useful for scripting\n"
     "                        purposes, you would generally use --version otherwise.\n\n"
