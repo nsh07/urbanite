@@ -1,4 +1,4 @@
-#include "../include/help.hpp"
+#include "help.hpp"
 #include <string>
 
 #define URBANITE_VERSION "1.4.1"

@@ -29,10 +29,10 @@
 
 #include <getopt.h>
 
-#include "../include/help.hpp"
-#include "../include/other.hpp"
-#include "../include/print.hpp"
-#include "../include/urban++.hpp"
+#include "help.hpp"
+#include "other.hpp"
+#include "print.hpp"
+#include "urban++.hpp"
 
 int main(int argc, char *argv[])
 {

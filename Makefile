@@ -10,7 +10,7 @@ SRC = src
 FONT = fonts
 
 CC = g++
-CFLAGS = -std=c++17 -O2 -Wall -DPREFIX_DIR=\"$(prefix)\"
+CFLAGS = -std=c++17 -O2 -Wall -DPREFIX_DIR=\"$(prefix)\" -Iinclude
 
 LIBS = -lcurl
 

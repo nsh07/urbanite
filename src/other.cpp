@@ -11,7 +11,7 @@
 #include <cmath>
 #include <string>
 
-#include "../include/other.hpp"
+#include "other.hpp"
 
 double roundToPlaces(double decimal, int places)
 {

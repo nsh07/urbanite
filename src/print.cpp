@@ -12,11 +12,11 @@
 #include <stdexcept>
 #include <string>
 
-#include "../include/Figlet.hpp"
-#include "../include/urban++.hpp"
-#include "../include/other.hpp"
+#include "Figlet.hpp"
+#include "urban++.hpp"
+#include "other.hpp"
 
-#include "../include/print.hpp"
+#include "print.hpp"
 
 using srilakshmikanthanp::FigletFont;
 using srilakshmikanthanp::Smushed;
