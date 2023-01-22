@@ -19,7 +19,11 @@
 */
 
 #ifndef PREFIX_DIR /* PREFIX_DIR should be defined at compile time. If not: */
-#define PREFIX_DIR "/usr"
+    #ifdef WIN32
+    #define PREFIX_DIR "."
+    #else
+    #define PREFIX_DIR "/usr"
+    #endif
 #endif
 
 #include <filesystem>
@@ -41,7 +45,12 @@ int main(int argc, char *argv[])
     int ret, index, noOfResults = 0;
     std::string searchTerm = "", emojiStyle = "emoji", fontFile = "standard.flf"; // Strings required later
     bool allResults = false;
+    
+    #ifdef WIN32
+    const std::string urbaniteFontDir = PREFIX_DIR "\\fonts\\";
+    #else
     const std::string urbaniteFontDir = PREFIX_DIR "/share/urbanite/";
+    #endif
 
     struct option longOptions[] // Long options
     {
