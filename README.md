@@ -103,12 +103,14 @@ This program is licensed under the GNU General Public License v3 or later.
 
 This program was made possible by the following libraries:
 
-* [Urban++](https://github.com/NMrocks/urban-plus-plus) by [Nishant Mishra](https://github.com/NMrocks) -
-  A library for searching words and their related info on Urban Dictionary. This NM guy is very nice, you should check him out ;)
+* My [Urban++](https://github.com/NMrocks/urban-plus-plus) library -
+  A C++ wrapper for the Urban Dictionary API.
 
   This library depends on:
-  * The [cURL](https://github.com/curl/curl/tree/master/include/curl) library by [Daniel Stenberg](https://github.com/bagder)
-  * The [JSON for Modern C++](https://github.com/nlohmann/json) library by [Niels Lohmann](https://github.com/nlohmann)
+  * [libcURL](https://github.com/curl/curl/tree/master/include/curl) by [Daniel Stenberg](https://github.com/bagder) -
+    An excellent data transfer library for C
+  * [JSON for Modern C++](https://github.com/nlohmann/json) by [Niels Lohmann](https://github.com/nlohmann) -
+    A very easy to use feature-loaded JSON handling library for C++
 
-* [Figlet For C++](https://github.com/srilakshmikanthanp/figlet) by [Sri Lakshmi Kanthan P](https://github.com/srilakshmikanthanp)
+* [Figlet For C++](https://github.com/srilakshmikanthanp/figlet) by [Sri Lakshmi Kanthan P](https://github.com/srilakshmikanthanp) -
   The library which makes the output more fancy
