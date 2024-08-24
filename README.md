@@ -8,9 +8,7 @@ Search words on Urban Dictionary at the comfort of your terminal.
 
 ---
 
-Urbanite is a program for searching words and their definitions on [Urban Dictionary](https://www.urbandictionary.com/) within a terminal emulator/shell. Now you never need to leave your cozy terminal window to search for your memes.
-
-Pounds of customization available, tons coming soon.
+Urbanite is a program for searching words and their definitions on [Urban Dictionary](https://www.urbandictionary.com/) within a terminal emulator/shell. Pointless, I know
 
 ---
 
@@ -39,7 +37,6 @@ For a basic word/phrase search, just run `urbanite your word or phrase here`. Fo
   You can see the like and dislike counts, like to dislike ratio and percentage of likes of a definition
   * **Custom symbols/emojis to denote the like/dislike counts -**
     You can customize the symbols used to denote the like and dislike counts and ratios. Comes with 4 sets of symbols and a custom symbol option. Just use `-e (--emoji-style)`.
-* More features and Windows support coming soon. Request features on the [Issues page](https://github.com/NMrocks/urbanite/issues) :)
 
 ## Installation
 
@@ -85,7 +82,7 @@ Linux instructions should work on other Unix-like systems like BSD-based OSs.
 
 #### Windows
 
-Windows is not supported yet but Windows support is planned. Stay tuned!
+Windows is not supported yet.
 
 ### Uninstall a from-source installation
 
@@ -104,7 +101,7 @@ This program is licensed under the GNU General Public License v3 or later.
 This program was made possible by the following libraries:
 
 * [Urban++](https://github.com/NMrocks/urban-plus-plus) by [Nishant Mishra](https://github.com/NMrocks) -
-  A library for searching words and their related info on Urban Dictionary. This NM guy is very nice, you should check him out ;)
+  Also developed by me.
 
   This library depends on:
   * The [cURL](https://github.com/curl/curl/tree/master/include/curl) library by [Daniel Stenberg](https://github.com/bagder)
