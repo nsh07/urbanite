@@ -8,7 +8,7 @@ Search words on Urban Dictionary at the comfort of your terminal.
 
 ---
 
-Urbanite is a program for searching words and their definitions on [Urban Dictionary](https://www.urbandictionary.com/) within a terminal emulator/shell. Pointless, I know
+Urbanite is a program for searching words and their definitions on [Urban Dictionary](https://www.urbandictionary.com/) within a terminal emulator/shell.
 
 ---
 
