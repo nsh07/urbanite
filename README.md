@@ -1,3 +1,6 @@
+> [!NOTE]
+> I made this program back in 2021 when I was in high school, and I am no longer interested in maintaining it further. Please fork this repo if you wish to continue the development of this project.
+
 <div align="center">
 
 # Urbanite
